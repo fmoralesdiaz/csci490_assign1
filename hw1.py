@@ -7,9 +7,11 @@
 
 from os import system
 import sys
-import re
+#import re
 from Node import Node
 from Hfns import H_zero, H_east_west
+from Data import Data
+
 
 def plain_city_string(city_list):
     base_city_string = " ".join([city for city in city_list])
@@ -151,40 +153,6 @@ for input_line in france_roads_file:
 france_roads_file.close()
 
 
-#  Attempting to make dict of dicts
-#   Need to opena and read file france-latlong.txt
-#
-#
-#
-
-lat_long_dict = {}
-lat_long_DB={}
-
-lat_file = open("france-latlong.txt")
-
-for input_line in lat_file:
-    input_line = input_line.strip()
-    
-    #using regex to group ouput and use matcher object 
-    regex_pattern = re.compile("(^.+\w),.+,\s.+\s(\d+\.\d+)\s(\d+\.\d+)")
-    matchedOutput = regex_pattern.match(input_line)
-
-    #if there is a line that doesnt match the pattern print an error message
-    if not matchedOutput:
-        #print("incorrect input")
-        continue
-        
-    city_name = matchedOutput.group(1)
-    city_lat = matchedOutput.group(2)
-    city_long = matchedOutput.group(3)
-
-    lat_long_dict['lat']=city_lat
-    lat_long_dict['long']=city_long
-
-    lat_long_DB[city_name]=lat_long_dict
-
-lat_file.close()
-
 # open france long file
 france_long_file = open("france-long1.txt")
 
@@ -218,8 +186,11 @@ astar(from_city, to_city, france_roads, france_long, H_zero())
 
 astar(from_city, to_city, france_roads, france_long, H_east_west())
 
+latLongDb=Data.getLatLong()
 
-print("\n\nPrinting the values of the data base: ")
-print (lat_long_DB)
+
+
+# print("\n\nPrinting the values of the data base: ")
+# print (lat_long_DB)
 
 
