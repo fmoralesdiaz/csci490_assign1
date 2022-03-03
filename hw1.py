@@ -9,7 +9,7 @@ from os import system
 import sys
 #import re
 from Node import Node
-from Hfns import H_zero, H_east_west
+from Hfns import H_zero, H_east_west, H_north_south
 from Data import Data
 
 
@@ -131,6 +131,7 @@ def astar(from_city, to_city, france_roads, france_long, h):
     print(nodes_expanded, "nodes expanded\n\n")
 
 
+
 france_roads = {}
 france_long = {}
 
@@ -182,12 +183,26 @@ if to_city.name not in france_long:
     print("To city not valid: ", to_city.name)
     sys.exit()
 
+
 astar(from_city, to_city, france_roads, france_long, H_zero())
 
 astar(from_city, to_city, france_roads, france_long, H_east_west())
 
-latLongDb=Data.getLatLong()
+print("\n\n\nThese are the contents of france_roads: ")
+print(france_roads)
 
+print("\n\n\nThese are the elements of france_long: ")
+print(france_long)
+
+latLongDB = Data.getLatLong()
+#print("\n\n\nThese are the contents of dataBase from hw1.py: ")
+#print(latLongDB)
+
+
+
+
+
+#astar(latLongDb[from_city.name],latLongDb[from_city.name]['lat'],latLongDb[to_city.name],latLongDb[to_city.name]['lat'],H_north_south())
 
 
 # print("\n\nPrinting the values of the data base: ")

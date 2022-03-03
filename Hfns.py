@@ -17,3 +17,11 @@ class H_east_west:
 
     def h(self, long1, long2):
         return 8 * abs(int(long1) - int(long2))
+    
+class H_north_south:
+    def name(self):
+        return "h=north-south distance"
+    
+    def h(self,lat1,lat2):
+
+        return 8*abs(int(lat1)-int(lat2))

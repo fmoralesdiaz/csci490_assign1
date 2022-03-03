@@ -5,14 +5,8 @@
 import re
 class Data:
 
-
- def name(self):
-  return "lat_longDB"
-
-
-
  def getLatLong(): 
-  lat_file = open("france-latlong.txt")
+  lat_file = open("france-latlong-sav.txt")
 
   lat_long_DB={}
   lat_long_dict={}
@@ -35,10 +29,9 @@ class Data:
 
     lat_long_dict['lat']=city_lat
     lat_long_dict['long']=city_long
-
     lat_long_DB[city_name]=lat_long_dict
   lat_file.close()
-  # print("\n\nPrinting the values of the data base: ")
-  # print (lat_long_DB)
+  #print("\n\nPrinting the values of the data base from Data.py file: ")
+  #print (lat_long_DB)
 
-  return lat_long_dict
+  return lat_long_DB
