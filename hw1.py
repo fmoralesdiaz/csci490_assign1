@@ -53,7 +53,7 @@ def astar(from_city, to_city, france_roads, france_long, h):
     from_city.h = h.h(france_long[to_city.name], france_long[from_city.name])
     from_city.f = from_city.h + from_city.g
 
-    print("A* with ", h.name(), ":\n\n", sep='')
+    #print("A* with ", h.name(), ":\n", sep='')
 
     # while open list is not empty
     while len(open_list) != 0:
@@ -61,8 +61,8 @@ def astar(from_city, to_city, france_roads, france_long, h):
         # pop front of openlist and set current node
         current_node = open_list.pop(0)
 
-        print("Expanding ", current_node.name, " f=", current_node.f, ",",
-              " g=", current_node.g, ",", " h=", current_node.h, sep='')        
+        # print("Expanding ", current_node.name, " f=", current_node.f, ",",
+        #       " g=", current_node.g, ",", " h=", current_node.h, sep='')        
 
         # if current node is destination, set path length and break
         if current_node.name == to_city.name:
@@ -80,7 +80,7 @@ def astar(from_city, to_city, france_roads, france_long, h):
                           h.h(france_long[to_city.name],
                               france_long[name])) for name in france_roads[current_node.name].keys()]
         children = sorted(children, key=lambda x: x.name)
-        print("Children are : " + city_string(children))
+        # print("Children are : " + city_string(children))
 
         # for every child
         for child in children:
@@ -91,27 +91,27 @@ def astar(from_city, to_city, france_roads, france_long, h):
 
                 # else if child has smaller value then openlist, replace openlist city with child
                 elif child.f < open_list[open_list.index(child)].f:
-                    print("***Revaluing open node", child.name, "from",
-                          open_list[open_list.index(child)].f, "to", child.f)
+                    # print("***Revaluing open node", child.name, "from",
+                    #       open_list[open_list.index(child)].f, "to", child.f)
                     open_list[open_list.index(child)] = child
 
             # else if child has smaller value then closed_list,
             # remove from closed_list and add child back onto open_list
             elif child.f < closed_list[closed_list.index(child)].f:
-                print("***Revaluing closed node", child.name, "from",
-                      closed_list[closed_list.index(child)].f, "to", child.f)
+                # print("***Revaluing closed node", child.name, "from",
+                #       closed_list[closed_list.index(child)].f, "to", child.f)
                 open_list.append(child)
                 closed_list.remove(child)
 
         # sort openlist by name and by f value and print
         open_list = sorted(open_list, key=lambda x: x.name)
         open_list = sorted(open_list, key=lambda x: x.f)
-        print("Open list is: ", city_f_string(open_list))
+        # print("Open list is: ", city_f_string(open_list))
 
         # add current node to closed list and print
         closed_list.append(current_node)
-        print("Closed list is: ", city_f_string(closed_list))
-        print()
+        # print("Closed list is: ", city_f_string(closed_list))
+        #print()
         
     # if solution found
     #  backtrack through the closed list using parent references to
@@ -123,7 +123,7 @@ def astar(from_city, to_city, france_roads, france_long, h):
             solution_path.insert(0, current_node.name)
             current_node = closed_list[closed_list.index(Node(current_node.parent))]
         solution_path.insert(0, from_city.name)
-        print("\n\nA* solution with ", h.name(), "for", to_city.name,"-",from_city.name)
+        print("\n\nA* solution with ", h.name(), "for", from_city.name,"-",to_city.name)
         print("Path length:", path_length)
     else:
         print("\n\nA* has no solution")
@@ -166,34 +166,40 @@ for input_line in france_long_file:
 
 france_long_file.close()
 
-arg_count = len(sys.argv)
+# arg_count = len(sys.argv)
 
-if arg_count == 3:
-    from_city  = Node(sys.argv[1])
-    to_city    = Node(sys.argv[2])
-else:
-    print("Two arguments required: from city and to city")
-    sys.exit()
+# if arg_count == 3:
+#     from_city  = Node(sys.argv[1])
+#     to_city    = Node(sys.argv[2])
+# else:
+#     print("Two arguments required: from city and to city")
+#     sys.exit()
 
-if from_city.name not in france_long:
-    print("From city not valid: ", from_city.name)
-    sys.exit()
+to_city_db = {"Bordeaux","Toulouse","Montpellier","Avignon","Marseille","Nice","Grenoble"}
+from_city = Node("Calais")
+to_city = Node("")
 
-if to_city.name not in france_long:
-    print("To city not valid: ", to_city.name)
-    sys.exit()
+for city in to_city_db:
+    
+    to_city.name = city
 
-astar(from_city, to_city, france_roads, france_long, H_zero())
+    print_string = "Solution for Calais - "+to_city.name
 
-astar(from_city, to_city, france_roads, france_long, H_east_west())
 
-#print("\n\n\nThese are the contents of france_roads: ")
-#print(france_roads)
+    print (print_string+"\n")
+    if from_city.name not in france_long:
+     print("From city not valid: ", from_city.name)
+     sys.exit()
 
-#print("\n\n\nThese are the elements of france_long: ")
-#print(france_long)
+    if to_city.name not in france_long:
+     print("To city not valid: ", to_city.name)
+     sys.exit()
 
-#latLongDB = Data.getLatLong()
+    astar(from_city, to_city, france_roads, france_long, H_zero())
+
+    astar(from_city, to_city, france_roads, france_long, H_east_west())
+
+
 
 francDb = Data()
 francDb.getLatLong()
