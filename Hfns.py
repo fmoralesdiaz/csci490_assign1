@@ -23,5 +23,5 @@ class H_north_south:
         return "h=north-south distance"
     
     def h(self,lat1,lat2):
-
-        return 8*abs(int(lat1)-int(lat2))
+ 
+        return 8*abs(float(lat1)-float(lat2))

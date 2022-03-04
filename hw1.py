@@ -14,19 +14,19 @@ from Data import Data
 
 
 def plain_city_string(city_list):
-    base_city_string = " ".join([city for city in city_list])
-    full_city_string = "(" + base_city_string + ")"
+    base_city_string = ", ".join([city for city in city_list])
+    full_city_string =   base_city_string 
     return full_city_string    
 
     
 def city_string(node_list):
-    base_city_string = " ".join([node.name for node in node_list])
-    full_city_string = "(" + base_city_string + ")"
+    base_city_string = ", ".join([node.name for node in node_list])
+    full_city_string = base_city_string 
     return full_city_string    
 
 def city_f_string(node_list):
-    base_city_string = " ".join(["(" + node.name + " " + str(node.f) + ")" for node in node_list])
-    full_city_string = "(" + base_city_string + ")"
+    base_city_string = ", ".join([  node.name + " = " + str(node.f) for node in node_list])
+    full_city_string = base_city_string 
     return full_city_string    
 
 
@@ -48,7 +48,7 @@ def astar(from_city, to_city, france_roads, france_long, h):
     closed_list = []
     nodes_expanded = 0
     path_length = 0
-
+    
     # set inital cities f, g and h values
     from_city.h = h.h(france_long[to_city.name], france_long[from_city.name])
     from_city.f = from_city.h + from_city.g
@@ -80,7 +80,7 @@ def astar(from_city, to_city, france_roads, france_long, h):
                           h.h(france_long[to_city.name],
                               france_long[name])) for name in france_roads[current_node.name].keys()]
         children = sorted(children, key=lambda x: x.name)
-        print("Children are " + city_string(children))
+        print("Children are : " + city_string(children))
 
         # for every child
         for child in children:
@@ -106,11 +106,11 @@ def astar(from_city, to_city, france_roads, france_long, h):
         # sort openlist by name and by f value and print
         open_list = sorted(open_list, key=lambda x: x.name)
         open_list = sorted(open_list, key=lambda x: x.f)
-        print("Open list is", city_f_string(open_list))
+        print("Open list is: ", city_f_string(open_list))
 
         # add current node to closed list and print
         closed_list.append(current_node)
-        print("Closed list is", city_f_string(closed_list))
+        print("Closed list is: ", city_f_string(closed_list))
         print()
         
     # if solution found
@@ -123,7 +123,7 @@ def astar(from_city, to_city, france_roads, france_long, h):
             solution_path.insert(0, current_node.name)
             current_node = closed_list[closed_list.index(Node(current_node.parent))]
         solution_path.insert(0, from_city.name)
-        print("\n\nA* solution with ", h.name(), ": ", plain_city_string(solution_path), sep='')
+        print("\n\nA* solution with ", h.name(), "for", to_city.name,"-",from_city.name)
         print("Path length:", path_length)
     else:
         print("\n\nA* has no solution")
@@ -183,22 +183,32 @@ if to_city.name not in france_long:
     print("To city not valid: ", to_city.name)
     sys.exit()
 
-
 astar(from_city, to_city, france_roads, france_long, H_zero())
 
 astar(from_city, to_city, france_roads, france_long, H_east_west())
 
-print("\n\n\nThese are the contents of france_roads: ")
-print(france_roads)
+#print("\n\n\nThese are the contents of france_roads: ")
+#print(france_roads)
 
-print("\n\n\nThese are the elements of france_long: ")
-print(france_long)
+#print("\n\n\nThese are the elements of france_long: ")
+#print(france_long)
 
-latLongDB = Data.getLatLong()
+#latLongDB = Data.getLatLong()
+
+francDb = Data()
+francDb.getLatLong()
+
+
 #print("\n\n\nThese are the contents of dataBase from hw1.py: ")
-#print(latLongDB)
 
+#lat = francDb.db['Paris']['lat']
 
+#print (lat)
+
+#print("These are the keys: ")
+#print (francDb.db.keys())
+
+#astar(from_city,to_city,france_roads,francDb.db,H_north_south())
 
 
 
