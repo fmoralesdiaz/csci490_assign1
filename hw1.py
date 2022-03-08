@@ -6,14 +6,14 @@
 
 
 from os import system
-from pickletools import long1
-import sys
+#from pickletools import long1
+#import sys
 #import string
 #import re
 from Node import Node
 from Hfns import H_straight_line, H_zero, H_east_west, H_north_south
 from Data import Data
-
+import matplotlib.pyplot as plt
 
 def plain_city_string(city_list):
     base_city_string = ", ".join([city for city in city_list])
@@ -130,9 +130,9 @@ def astar(from_city, to_city, france_roads, france_long, h):
         solution_path.insert(0, from_city.name)
         print("\n\nA* solution with ", h.name(), "for", from_city.name,"-",to_city.name)
         print("Path length: {:0.2f}".format(path_length))
+        #return path_length
     else:
         print("\n\nA* has no solution")
-        
     print(nodes_expanded, "nodes expanded\n\n")
 
 
@@ -198,6 +198,14 @@ for city in to_city_db:
     astar(from_city, to_city, france_roads, france_long, H_zero())
 
     astar(from_city, to_city, france_roads, france_long, H_east_west())
+
+    #x_coordinates =['h=0','h=east-west']
+    #values = [h_zero_path_length,h_east_west_path_length]
+
+    #plt.bar(x_coordinates,values,tick_label = 'H functions', width =0.8)
+    #plt.title('My bar char!')
+
+    #plt.show()
 
 francDb = Data()
 
