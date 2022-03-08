@@ -6,10 +6,12 @@
 
 
 from os import system
+from pickletools import long1
 import sys
+#import string
 #import re
 from Node import Node
-from Hfns import H_zero, H_east_west, H_north_south
+from Hfns import H_straight_line, H_zero, H_east_west, H_north_south
 from Data import Data
 
 
@@ -42,6 +44,8 @@ def city_f_string(node_list):
 #
 # Notes:    Look for shortest path between two cities using A* search.
 
+
+
 def astar(from_city, to_city, france_roads, france_long, h):
     found_path = False
     open_list = [from_city]
@@ -49,6 +53,7 @@ def astar(from_city, to_city, france_roads, france_long, h):
     nodes_expanded = 0
     path_length = 0
     
+
     # set inital cities f, g and h values
     from_city.h = h.h(france_long[to_city.name], france_long[from_city.name])
     from_city.f = from_city.h + from_city.g
@@ -76,7 +81,7 @@ def astar(from_city, to_city, france_roads, france_long, h):
         # sort by name and print
         
         children = [Node(name, current_node.name,
-                          int(france_roads[current_node.name][name]) + current_node.g,
+                          float(france_roads[current_node.name][name]) + current_node.g,
                           h.h(france_long[to_city.name],
                               france_long[name])) for name in france_roads[current_node.name].keys()]
         children = sorted(children, key=lambda x: x.name)
@@ -124,7 +129,7 @@ def astar(from_city, to_city, france_roads, france_long, h):
             current_node = closed_list[closed_list.index(Node(current_node.parent))]
         solution_path.insert(0, from_city.name)
         print("\n\nA* solution with ", h.name(), "for", from_city.name,"-",to_city.name)
-        print("Path length:", path_length)
+        print("Path length: {:0.2f}".format(path_length))
     else:
         print("\n\nA* has no solution")
         
@@ -166,18 +171,11 @@ for input_line in france_long_file:
 
 france_long_file.close()
 
-# arg_count = len(sys.argv)
-
-# if arg_count == 3:
-#     from_city  = Node(sys.argv[1])
-#     to_city    = Node(sys.argv[2])
-# else:
-#     print("Two arguments required: from city and to city")
-#     sys.exit()
-
+francDb = Data()
 to_city_db = {"Bordeaux","Toulouse","Montpellier","Avignon","Marseille","Nice","Grenoble"}
 from_city = Node("Calais")
 to_city = Node("")
+
 
 for city in to_city_db:
     
@@ -185,8 +183,10 @@ for city in to_city_db:
 
     print_string = "Solution for Calais - "+to_city.name
 
+    new_string = print_string.center(159,'.')
 
-    print (print_string+"\n")
+
+    print (new_string)
     if from_city.name not in france_long:
      print("From city not valid: ", from_city.name)
      sys.exit()
@@ -199,29 +199,18 @@ for city in to_city_db:
 
     astar(from_city, to_city, france_roads, france_long, H_east_west())
 
-
-
 francDb = Data()
-francDb.getLatLong()
+
+lat1 = francDb.db[from_city.name]['lat']
+lat2 = francDb.db[to_city.name]['lat']
+long1 = francDb.db[from_city.name]['long']
+long2 = francDb.db[to_city.name]['long']
+
+print("Lat value for calais: ",lat1)
+print ("Long value for calais: ",long1)
 
 
-#print("\n\n\nThese are the contents of dataBase from hw1.py: ")
+print ("This is the straight line distance one, hopefully it works :")
 
-#lat = francDb.db['Paris']['lat']
-
-#print (lat)
-
-#print("These are the keys: ")
-#print (francDb.db.keys())
-
-#astar(from_city,to_city,france_roads,francDb.db,H_north_south())
-
-
-
-#astar(latLongDb[from_city.name],latLongDb[from_city.name]['lat'],latLongDb[to_city.name],latLongDb[to_city.name]['lat'],H_north_south())
-
-
-# print("\n\nPrinting the values of the data base: ")
-# print (lat_long_DB)
 
 
