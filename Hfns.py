@@ -10,21 +10,21 @@ class H_zero:
     def name(self):
         return "h=0"
 
-    def h(self, long1, long2):
+    def h(self, long1, long2,lat1,lat2):
         return 0
 
 class H_east_west:
     def name(self):
         return "h=east-west distance"
 
-    def h(self, long1, long2):
+    def h(self,lat1,lat2,long1,long2):
         return 7.8*abs(float(long1) - float(long2))
     
 class H_north_south:
     def name(self):
         return "h=north-south distance"
     
-    def h(self,lat1,lat2):
+    def h(self,lat1,lat2,long1,long2):
         return 7.8*abs(float(lat1)-float(lat2))
 class H_straight_line:
     def name(self):
