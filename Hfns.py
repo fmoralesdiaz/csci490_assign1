@@ -17,7 +17,7 @@ class H_east_west:
     def name(self):
         return "h=east-west distance"
 
-    def h(self, long1, long2,lat1,lat2):
+    def h(self,lat1,lat2,long1,long2):
         return 7.8*abs(float(long1) - float(long2))
     
 class H_north_south:
