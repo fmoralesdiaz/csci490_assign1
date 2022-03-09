@@ -40,7 +40,6 @@ def city_f_string(node_list):
 #
 # Notes:    Look for shortest path between two cities using A* search.
 
-francDb = Data()
 
 def astar(from_city, to_city, france_roads, francDb, h):
     found_path = False
@@ -49,18 +48,19 @@ def astar(from_city, to_city, france_roads, francDb, h):
     nodes_expanded = 0
     path_length = 0
 
-    lat1 = francDb.db[from_city.name]['lat']
-    lat2 = francDb.db[to_city.name]['lat']
-    long1 = francDb.db[from_city.name]['long']
-    long2 = francDb.db[to_city.name]['long']
 
-    
-    
+
+    lat2 = francDb.db[from_city.name]['lat']
+    lat1 = francDb.db[to_city.name]['lat']
+    long2 = francDb.db[from_city.name]['long']
+    long1 = francDb.db[to_city.name]['long']
+    #long2 = francDb.db[to_city.name]['long']
 
     # set inital cities f, g and h values
     #
     #from_city.h = h.h(france_long[to_city.name], france_long[from_city.name])
-    from_city.h = h.h(lat1,lat2,long1,long2)
+    # from_city.h = h.h(francDb.db[to_city.name]['lat'],francDb.db[from_city.name]['lat'],francDb.db[to_city.name]['long'],francDb.db[from_city.name])
+    from_city.h = h.h (lat1,lat2,long1,long2)
     from_city.f = from_city.h + from_city.g
 
     print("A* with ", h.name(), ":\n", sep='')
@@ -87,8 +87,7 @@ def astar(from_city, to_city, france_roads, francDb, h):
         
         children = [Node(name, current_node.name,
                           float(france_roads[current_node.name][name]) + current_node.g,
-                          h.h(lat1,
-                              lat2,long1,long2)) for name in france_roads[current_node.name].keys()]
+                          h.h(lat1,lat2,long1,long2)) for name in france_roads[current_node.name].keys()]
         children = sorted(children, key=lambda x: x.name)
         print("Children are : " + city_string(children))
 
@@ -143,7 +142,6 @@ def astar(from_city, to_city, france_roads, francDb, h):
 
 
 france_roads = {}
-france_long = {}
 
 france_roads_file = open("france-roads1.txt")
 
@@ -163,22 +161,9 @@ for input_line in france_roads_file:
 # close file
 france_roads_file.close()
 
-
-# open france long file
-france_long_file = open("france-long1.txt")
-
-for input_line in france_long_file:
-    input_line = input_line.strip()
-
-    if input_line != "" and input_line[0] != "#":
-        city_long = input_line.split()
-        france_long[city_long[0]] = city_long[1]
-
-france_long_file.close()
-
 francDb = Data()
 to_city_db = {"Bordeaux","Toulouse","Montpellier","Avignon","Marseille","Nice","Grenoble"}
-from_city = Node("Calais")
+from_city = Node("Toulouse")
 to_city = Node("")
 
 francDb = Data()
@@ -192,21 +177,18 @@ for city in to_city_db:
 
 
     print (new_string)
-    if from_city.name not in france_long:
+
+    astar(from_city, to_city, france_roads, francDb, H_zero())
+    astar(from_city, to_city, france_roads, francDb, H_east_west())
+    astar(from_city,to_city,france_roads,francDb,H_straight_line())
+    astar(from_city,to_city,france_roads,francDb,H_north_south())
+    if from_city.name not in francDb.db:
      print("From city not valid: ", from_city.name)
      sys.exit()
 
-    if to_city.name not in france_long:
+    if to_city.name not in francDb.db:
      print("To city not valid: ", to_city.name)
      sys.exit()
-
-    astar(from_city, to_city, france_roads, francDb, H_zero())
-
-    astar(from_city, to_city, france_roads, francDb, H_east_west())
-
-    astar(from_city,to_city,france_roads,francDb,H_north_south())
-
-
 
 
 
